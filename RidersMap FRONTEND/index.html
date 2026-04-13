@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>RidersMap - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="logo-definitivo.png" type="image/png">
+    <style>
+        /* Estilos específicos para el logo con efecto visual */
+        .logo-biker {
+            width: 260px;
+            height: auto;
+            margin: 0 auto 20px auto;
+            display: block;
+            mix-blend-mode: lighten; 
+            filter: brightness(1.1) contrast(1.1) drop-shadow(0px 0px 15px rgba(255, 122, 0, 0.7));
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .logo-biker:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2) contrast(1.2) drop-shadow(0px 0px 25px rgba(255, 122, 0, 1));
+        }
+
+        /* Ajuste dinámico para el modal de registro */
+        #modalRegistro.modal {
+            display: none; /* Se cambia a flex desde JS */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Estilo para mensajes de error de validación */
+        .error-msg {
+            color: var(--rojo);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: none; /* Oculto por defecto */
+            font-family: 'Segoe UI', sans-serif;
+        }
+    </style>
+</head>
+<body class="login-page-body" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0;">
+
+    <div class="login-card">
+        <img src="logo-definitivo.png" alt="RidersMap Logo" class="logo-biker">
+        
+        <h2 style="text-align: center; font-family: 'Orbitron', sans-serif; color: var(--naranja); margin-bottom: 30px;">ACCESO RIDER</h2>
+
+        <div class="input-group">
+            <input type="email" id="loginEmail" placeholder="Email" class="input-dark">
+            <input type="password" id="loginPass" placeholder="Contraseña" class="input-dark">
+        </div>
+
+        <button onclick="login()" class="btn btn-verde" style="margin-top: 15px; width: 100%;">ENTRAR</button>
+
+        <div class="register-container" style="margin-top: 25px; text-align: center;">
+            <p style="color: #888; font-size: 0.9rem;">¿Aún no tienes cuenta?</p>
+            <button onclick="abrirModalRegistro()" class="btn-outline" style="width: 100%;">
+                Registrarse ahora
+            </button>
+        </div>
+    </div>
+
+    <div id="modalRegistro" class="modal">
+        <div class="modal-content" style="text-align: center; background-color: #0a0a0a; border: 1.5px solid var(--naranja); box-shadow: 0 0 25px rgba(255, 140, 66, 0.3); max-width: 450px; width: 90%; padding: 40px; border-radius: 15px; margin: auto;">
+            <img src="logo-definitivo.png" class="logo-biker" style="width: 130px; margin-bottom: 10px;">
+            <p style="color:#bbb; margin-bottom: 25px; font-family: 'Segoe UI', sans-serif;">Únete a la comunidad de RidersMap</p>
+            
+            <div id="registroError" class="error-msg"></div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <input type="text" id="regNombre" placeholder="Nombre completo" class="input-dark">
+                <input type="email" id="regEmail" placeholder="Correo electrónico" class="input-dark">
+                <input type="password" id="regPass" placeholder="Contraseña" class="input-dark">
+                <input type="password" id="regPassConfirm" placeholder="Confirmar contraseña" class="input-dark">
+            </div>
+            
+            <button onclick="registrarUsuario()" class="btn btn-save" style="width: 100%; margin-top: 25px; text-transform: uppercase;">Finalizar Registro</button>
+            <button onclick="cerrarModalRegistro()" class="btn" style="background: transparent; color: #666; margin-top: 15px; font-size: 0.8rem;">Volver</button>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

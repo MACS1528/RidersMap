@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RidersMap</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="icon" href="logo-definitivo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos específicos para el widget del clima que acabamos de añadir */
+        #weather-widget {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(15, 15, 15, 0.85);
+            border: 1px solid var(--rojo);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            min-width: 110px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+        #weather-info img {
+            width: 45px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* NUEVO: Botón de pantalla completa para el Victus */
+        .btn-fullscreen {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 2000; /* Aumentado para ganar a las capas de Leaflet */
+            background: rgba(10, 10, 10, 0.9);
+            color: var(--naranja);
+            border: 1px solid var(--naranja);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 122, 0, 0.3);
+        }
+
+        .btn-fullscreen:hover {
+            background: var(--naranja);
+            color: #000;
+            box-shadow: 0 0 20px var(--naranja);
+            transform: scale(1.05);
+        }
+
+        /* CONFIGURACIÓN CRÍTICA PARA PANTALLA COMPLETA */
+        #map:fullscreen {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Asegura que los hijos del mapa sean visibles en modo fullscreen */
+        #map:fullscreen .btn-fullscreen,
+        #map:fullscreen #weather-widget,
+        #map:fullscreen .map-controls-overlay {
+            z-index: 2147483647; /* Valor máximo para estar siempre encima */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center;">
+            <img src="logo-definitivo.png" alt="Logo" class="nav-logo">
+            <div class="user-info-group">
+                <b id="userName" style="font-size:1.3rem; color: #fff;">Cargando...</b>
+                <span id="roleBadge" class="admin-badge" style="display:none; margin-left: 15px; border: 1px solid var(--rojo); padding: 2px 8px; border-radius: 4px;">ADMINISTRADOR TOTAL</span>
+            </div>
+        </div>
+
+        <div id="navAdminSearch" style="display:none; flex-grow: 1; max-width: 400px; margin: 0 20px;">
+            <input type="text" onkeyup="filtrarContenido(this.value)" placeholder="🔍 Buscar rider, moto o ruta..." class="input-dark" style="border-radius: 20px; padding: 8px 20px; border-color: var(--rojo);">
+        </div>
+
+        <button onclick="logout()" class="btn btn-rojo">SALIR</button>
+    </nav>
+
+    <div class="main-container">
+        
+        <div class="sidebar">
+            <section class="card">
+                <h2 style="font-family: 'Permanent Marker'; color: var(--naranja);">Mi Garaje</h2>
+                <button onclick="openModal('motoModal')" class="btn btn-verde" style="width:100%; margin-bottom:15px;">+ AÑADIR MOTO</button>
+                <div id="motosList" class="scroll-area"></div>
+            </section>
+
+            <section class="card" style="margin-top:20px;">
+                <h2 style="font-family: 'Permanent Marker'; color: var(--azul);">Rutas Guardadas</h2>
+                <div id="rutasList" class="scroll-area"></div>
+            </section>
+        </div>
+
+        <div class="content">
+            <div style="position: relative;">
+                <div id="map" class="map-container">
+                    <button id="btn-fs" onclick="toggleMapFullscreen()" class="btn-fullscreen">
+                        ⛶ PANTALLA COMPLETA
+                    </button>
+
+                    <div id="weather-widget">
+                        <div id="weather-info">
+                            <small>Localizando...</small>
+                        </div>
+                    </div>
+
+                    <div class="map-controls-overlay">
+                        <button id="btnGPS" onclick="toggleGPS()" class="btn-gps">🏁 INICIAR RUTA</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-controls" style="display:none;"></div>
+
+            <section id="adminUserSection" class="card" style="display:none; margin-top: 20px; border-top: 3px solid var(--rojo);">
+                <h2 style="color: var(--rojo); font-family: 'Orbitron';">CENTRAL DE USUARIOS (ADMIN)</h2>
+                <div id="usuariosList" class="grid-admin"></div>
+            </section>
+        </div>
+
+        <div class="sidebar">
+            <section class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2 style="font-family: 'Permanent Marker'; color: var(--verde);">Meetups</h2>
+                    <button onclick="openModal('meetupModal')" class="btn-circle">+</button>
+                </div>
+
+                <div id="adminSearchSection" style="display:none;"></div>
+
+                <div id="meetupsList" class="scroll-area" style="max-height: 75vh;"></div>
+            </section>
+        </div>
+    </div>
+
+    <div id="motoModal" class="modal">
+        <div class="modal-content">
+            <h2>Nueva Moto</h2>
+            <input type="text" id="marca" placeholder="Marca (Ej: Honda)" class="input-dark">
+            <input type="text" id="modelo" placeholder="Modelo (Ej: CBR 600)" class="input-dark">
+            <input type="number" id="cc" placeholder="Cilindrada (CC)" class="input-dark">
+            <button onclick="guardarMoto()" class="btn btn-save">⚡ Guardar Moto</button>
+            <button onclick="closeModal('motoModal')" class="btn" style="background:#333; width:100%; margin-top: 10px;">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="meetupModal" class="modal">
+        <div class="modal-content" style="border-color: var(--verde);">
+            <h2 style="color: var(--verde); font-family: 'Permanent Marker'; font-size: 1.8rem;">Nuevo Encuentro</h2>
+            <input type="text" id="titM" placeholder="Título (Ej: Salida Dominguera)" class="input-dark">
+            <textarea id="desM" placeholder="Lugar de salida, hora, ritmo..." class="input-dark" style="height:100px;"></textarea>
+            <button onclick="guardarMeetup()" class="btn btn-success">🚀 Publicar Encuentro</button>
+            <button onclick="closeModal('meetupModal')" class="btn" style="background:#333; width:100%; margin-top: 10px;">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/mapa.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
