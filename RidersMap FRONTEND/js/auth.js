@@ -71,14 +71,14 @@ async function registrarUsuario() {
         return;
     }
 
-    // --- NUEVA VALIDACIÓN DE EMAIL (Debe tener @ y un punto después) ---
+    // --- VALIDACIÓN DE EMAIL (Debe tener @ y un punto después) ---
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         mostrarError("Email no válido (ejemplo: usuario@test.com)");
         return;
     }
 
-    // --- NUEVA VALIDACIÓN DE CONTRASEÑA (Mínimo 4 caracteres) ---
+    // --- VALIDACIÓN DE CONTRASEÑA (Mínimo 4 caracteres) ---
     if (pass.length < 4) {
         mostrarError("La contraseña debe tener al menos 4 caracteres");
         return;
