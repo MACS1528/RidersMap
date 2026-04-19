@@ -12,7 +12,7 @@ async function cargarSistema() {
         localStorage.setItem('userRole', usuarioActual.rol);
         localStorage.setItem('userName', usuarioActual.nombre);
 
-        // MODIFICADO: Ahora detecta el rol correctamente aunque tenga el prefijo ROLE_
+        // Detecta el rol correctamente aunque tenga el prefijo ROLE_
         isAdmin = (usuarioActual.rol === 'ADMIN' || usuarioActual.rol === 'ADMINISTRADOR' || usuarioActual.rol === 'ROLE_ADMIN');
         document.getElementById('userName').innerText = `RIDER: ${usuarioActual.nombre.toUpperCase()}`;
         
@@ -130,7 +130,7 @@ async function cancelarAsistencia(meetupId) {
     }
 }
 
-// MODIFICADO: Función optimizada para el borrado total de usuarios y otros items
+// Función optimizada para el borrado total de usuarios y otros items
 async function eliminarItem(tipo, id) {
     const item = (datosCache[tipo] || []).find(i => i.id === id);
     
@@ -142,7 +142,7 @@ async function eliminarItem(tipo, id) {
         return;
     }
 
-    // --- MEJORA AQUÍ: Mensaje detallado según el tipo de borrado ---
+    // ---  Mensaje detallado según el tipo de borrado ---
     let confirmacion;
     if (tipo === 'usuarios') {
         confirmacion = "¿ESTÁS SEGURO? Se eliminará definitivamente al usuario y TODA su información: motos, rutas creadas y encuentros. Esta acción no se puede deshacer.";
