@@ -23,20 +23,20 @@ public class Usuario {
 
     private String nombre;
 
-    // NUEVO: Campo de rol necesario para Spring Security
+    //  Campo de rol necesario para Spring Security
     private String rol; 
 
-    // MODIFICADO: Añadido orphanRemoval=true para asegurar que las motos se borren al borrar el usuario
+    // Añadido orphanRemoval=true para asegurar que las motos se borren al borrar el usuario
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnoreProperties("usuario")
     private List<Moto> motos = new ArrayList<>();
 
-    // MODIFICADO: Añadido orphanRemoval=true para asegurar que las rutas se borren al borrar el usuario
+    // Añadido orphanRemoval=true para asegurar que las rutas se borren al borrar el usuario
     @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnoreProperties("creador")
     private List<Ruta> rutas = new ArrayList<>();
 
-    // MODIFICADO: Añadido CascadeType.REMOVE para limpiar la tabla intermedia de favoritos
+    //  Añadido CascadeType.REMOVE para limpiar la tabla intermedia de favoritos
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
       name = "usuarios_rutas_favoritas", 
@@ -45,7 +45,7 @@ public class Usuario {
     @JsonIgnoreProperties({"creador", "usuariosFavoritos"}) 
     private List<Ruta> rutasFavoritas = new ArrayList<>();
 
-    // NUEVO: Relación con Encuentros (usando "usuario" para coincidir con Encuentro.java)
+    // Relación con Encuentros (usando "usuario" para coincidir con Encuentro.java)
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnoreProperties("usuario")
     private List<Encuentro> encuentros = new ArrayList<>();
@@ -53,7 +53,7 @@ public class Usuario {
     // --- AÑADIDO PARA SOLUCIONAR ERROR DE BORRADO Y RECURSIÓN ---
     // Esta relación permite mapear la asistencia a otros encuentros y limpiar la tabla intermedia
     @ManyToMany(mappedBy = "asistentes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    // MODIFICADO: Añadimos "asistentes" y "usuario" para evitar que Jackson entre en bucle infinito
+    // Añadimos "asistentes" y "usuario" para evitar que Jackson entre en bucle infinito
     @JsonIgnoreProperties({"asistentes", "usuario"}) 
     private List<Encuentro> encuentrosAsistidos = new ArrayList<>();
 
