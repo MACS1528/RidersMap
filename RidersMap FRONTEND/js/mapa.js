@@ -24,7 +24,7 @@ function inicializarMapa() {
         // Capa base de OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        // NUEVO: Capa de TRÁFICO en tiempo real (Google Hybrid Traffic)
+        // Capa de TRÁFICO en tiempo real (Google Hybrid Traffic)
         L.tileLayer('https://{s}.google.com/vt/lyrs=m,traffic&x={x}&y={y}&z={z}', {
             maxZoom: 20,
             subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
@@ -50,7 +50,7 @@ function inicializarMapa() {
     } catch (e) { console.error("Error al cargar Leaflet"); }
 }
 
-// NUEVA FUNCIÓN: Toggle Pantalla Completa
+// Toggle Pantalla Completa
 function toggleMapFullscreen() {
     const mapElement = document.getElementById('map');
     const btn = document.getElementById('btn-fs');
@@ -85,12 +85,12 @@ function solicitarUbicacionInicial() {
         // Creamos el marcador que se va a mover con el nuevo icono
         motoMarker = L.marker([latitude, longitude], { icon: motoIcon }).addTo(map).bindPopup("Estás aquí").openPopup();
 
-        // NUEVO: Llamamos a la función del clima al obtener la ubicación
+        // Llamamos a la función del clima al obtener la ubicación
         obtenerClima(latitude, longitude);
     });
 }
 
-// NUEVA FUNCIÓN: Obtener datos de OpenWeatherMap
+// Obtener datos de OpenWeatherMap
 async function obtenerClima(lat, lon) {
     const apiKey = '671f725237130b6bc6016dd1eef6b8dd';
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${apiKey}`;
@@ -142,7 +142,7 @@ function toggleGPS() {
     }
 }
 
-// FUNCIÓN ACTUALIZADA: Navegación aleatoria por tramos reales
+// Navegación aleatoria por tramos reales
 async function rastrearSimulado() {
     // Si no tenemos tramo o hemos llegado al final del actual, buscamos una nueva dirección
     if (tramoActual.length === 0 || indiceTramo >= tramoActual.length) {
