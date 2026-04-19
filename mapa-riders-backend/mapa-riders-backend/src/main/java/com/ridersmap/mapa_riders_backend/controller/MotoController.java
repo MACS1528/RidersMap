@@ -140,9 +140,8 @@ public class MotoController {
 
     public ResponseEntity<Void> deleteMoto(@PathVariable Long id) {
 
-        // En tu actual código no compruebas propiedad, lo cual permite al admin 
 
-        // borrar cualquier cosa con solo tener el ID, que es lo que buscamos.
+        // Permitimos que el Admin borre cualquier cosa con solo tener el ID.
 
         if (motoRepository.existsById(id)) {
 
@@ -158,7 +157,7 @@ public class MotoController {
 
 
 
-    // Los métodos PUT y GET por ID se mantienen igual...
+    // Los métodos PUT y GET por ID se mantienen ...
 
     @GetMapping("/{id}")
 
