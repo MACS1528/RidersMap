@@ -22,12 +22,12 @@ public class Ruta {
 
     @ManyToOne
     @JoinColumn(name = "creador_id")
-    // MODIFICADO: Añadimos "encuentros" y "rol" para evitar recursión infinita
+    // Añadimos "encuentros" y "rol" para evitar recursión infinita
     @JsonIgnoreProperties({"rutas", "rutasFavoritas", "motos", "encuentros", "password", "rol"})
     private Usuario creador;
 
     @ManyToMany(mappedBy = "rutasFavoritas")
-    // MODIFICADO: Añadimos "encuentros" y "rol" aquí también
+    //  Añadimos "encuentros" y "rol" aquí también
     @JsonIgnoreProperties({"rutasFavoritas", "rutas", "motos", "encuentros", "password", "rol"})
     private List<Usuario> usuariosFavoritos;
 
