@@ -42,7 +42,7 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioActualizado, HttpStatus.OK);
     }
     
-    // 4. NUEVO: Obtener un solo usuario por su email (Útil para el Login del frontend)
+    // 4. Obtener un solo usuario por su email (Útil para el Login del frontend)
     @GetMapping("/perfil/{email}")
     public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable String email) {
         return usuarioRepository.findByEmail(email)
@@ -50,7 +50,7 @@ public class UsuarioController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // 5. NUEVO: Eliminar un usuario (Para el panel de Administrador)
+    // 5. Eliminar un usuario (Para el panel de Administrador)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
         try {
