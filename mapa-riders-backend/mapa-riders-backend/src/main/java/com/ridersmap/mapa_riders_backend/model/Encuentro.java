@@ -18,11 +18,11 @@ public class Encuentro {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    // MODIFICADO: Añadimos 'encuentrosAsistidos' para evitar la recursión desde el creador
+    // Añadimos 'encuentrosAsistidos' para evitar la recursión desde el creador
     @JsonIgnoreProperties({"motos", "rutas", "rutasFavoritas", "encuentros", "password", "rol", "encuentrosAsistidos"})
     private Usuario usuario;
 
-    // MODIFICADO: Se añade CascadeType.ALL para asegurar que al borrar el encuentro se limpien las asistencias
+    // Se añade CascadeType.ALL para asegurar que al borrar el encuentro se limpien las asistencias
     // Esto evita el error de clave foránea en la tabla asistencias_encuentros
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH})
     @JoinTable(
@@ -30,13 +30,13 @@ public class Encuentro {
         joinColumns = @JoinColumn(name = "encuentro_id"),
         inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
-    // MODIFICADO: Se añade explícitamente 'encuentrosAsistidos' para romper el bucle infinito con los asistentes
+    //  Se añade explícitamente 'encuentrosAsistidos' para romper el bucle infinito con los asistentes
     @JsonIgnoreProperties({"motos", "rutas", "rutasFavoritas", "encuentros", "password", "rol", "encuentrosAsistidos"})
     private List<Usuario> asistentes = new ArrayList<>();
 
     public Encuentro() {}
 
-    // --- NUEVO: MÉTODO PARA EL FRONTEND ---
+    // ---  MÉTODO PARA EL FRONTEND ---
     // Jackson detectará este getter y enviará "numAsistentes" en el JSON automáticamente
     public int getNumAsistentes() {
         return (asistentes != null) ? asistentes.size() : 0;
@@ -61,7 +61,7 @@ public class Encuentro {
     public List<Usuario> getAsistentes() { return asistentes; }
     public void setAsistentes(List<Usuario> asistentes) { this.asistentes = asistentes; }
     
-    // MÉTODO DE APOYO: Para limpiar asistentes manualmente si fuera necesario
+    // MÉTODO Para limpiar asistentes manualmente si fuera necesario
     public void removerAsistentes() {
         this.asistentes.clear();
     }
