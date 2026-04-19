@@ -5,7 +5,7 @@ function actualizarInterfaz() {
     renderizar('rutasList', datosCache.rutas, 'rutas');
     renderizar('meetupsList', datosCache.encuentros, 'encuentros');
     
-    // --- REFUERZO: Gestión de visibilidad del buscador para ADMIN ---
+    // --- Gestión de visibilidad del buscador para ADMIN ---
     const navSearch = document.getElementById('navAdminSearch');
     if (isAdmin && navSearch) {
         navSearch.style.display = 'block';
