@@ -32,12 +32,12 @@ public class SecurityConfig {
                 // El registro es abierto para todos
                 .requestMatchers("/api/usuarios/register").permitAll()
 
-                // --- NUEVO: REGLA DE BORRADO PARA ADMIN (Opción Authority) ---
-                // Usamos hasAuthority("ADMIN") para que coincida exactamente con "ADMIN" de tu base de datos
+                // REGLA DE BORRADO PARA ADMIN (Opción Authority) ---
+                // Usamos hasAuthority("ADMIN") para que coincida exactamente con "ADMIN" de la base de datos
                 // Solo el administrador puede borrar usuarios
                 .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").hasAuthority("ADMIN")
 
-                // MODIFICADO: Permitimos que cualquier usuario AUTENTICADO (User o Admin) pida el borrado de sus cosas.
+                // Permitimos que cualquier usuario AUTENTICADO (User o Admin) pida el borrado de sus cosas.
                 // La validación de si es el dueño o el admin la hace api.js y el controlador.
                 .requestMatchers(HttpMethod.DELETE, "/api/motos/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/rutas/**").authenticated()
