@@ -52,7 +52,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    // --- NUEVO MÉTODO: ELIMINAR USUARIO CON LIMPIEZA DE RELACIONES ---
+    // --- ELIMINAR USUARIO CON LIMPIEZA DE RELACIONES ---
     @Transactional
     public void eliminarUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
@@ -62,14 +62,14 @@ public class UsuarioService {
         // Esto evita errores de Foreign Key en la tabla 'usuarios_rutas_favoritas'
         usuario.getRutasFavoritas().clear();
 
-        // --- CORRECCIÓN BASADA EN TU USUARIO.JAVA ---
+        // --- CORRECCIÓN BASADA EN USUARIO.JAVA ---
         // 2. Limpiamos los encuentros creados por el usuario
         // Al tener orphanRemoval=true en Usuario.java, esto ayudará a limpiar las referencias
         if (usuario.getEncuentros() != null) {
             usuario.getEncuentros().clear();
         }
 
-        // --- AÑADIDO: LIMPIEZA DE ASISTENCIAS A OTROS ENCUENTROS ---
+        // --- LIMPIEZA DE ASISTENCIAS A OTROS ENCUENTROS ---
         // Esto soluciona el error de Foreign Key en la tabla 'asistencias_encuentros'
         if (usuario.getEncuentrosAsistidos() != null) {
             for (Encuentro encuentro : usuario.getEncuentrosAsistidos()) {
