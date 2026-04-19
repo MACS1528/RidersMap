@@ -9,7 +9,7 @@ import java.util.Optional; // Importación necesaria
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    // NUEVO MÉTODO: Permite buscar un usuario por su email.
+    // Permite buscar un usuario por su email.
     // Lo usaremos en el login para encontrar al usuario.
     Optional<Usuario> findByEmail(String email); 
 }
